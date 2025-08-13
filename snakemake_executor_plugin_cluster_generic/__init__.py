@@ -151,7 +151,7 @@ class Executor(RemoteExecutor):
             ext_jobid = (
                 subprocess.check_output(
                     '{submitcmd} "{jobscript}"'.format(
-                        submitcmd=submitcmd, jobscript=jobscript
+                        submitcmd=submitcmd.rstrip(), jobscript=jobscript
                     ),
                     shell=True,
                     env=env,

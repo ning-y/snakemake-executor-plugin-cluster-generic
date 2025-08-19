@@ -151,7 +151,7 @@ class Executor(RemoteExecutor):
             ext_jobid = (
                 subprocess.check_output(
                     '{submitcmd} "{jobscript}"'.format(
-                        submitcmd=submitcmd.rstrip(), jobscript=jobscript
+                        submitcmd=submitcmd.rstrip(), jobscript=shlex.quote(jobscript)
                     ),
                     shell=True,
                     env=env,
@@ -201,7 +201,7 @@ class Executor(RemoteExecutor):
                     ret = subprocess.check_output(
                         "{statuscmd} '{jobid}'".format(
                             jobid=job_info.external_jobid,
-                            statuscmd=self.workflow.executor_settings.status_cmd,
+                            statuscmd=self.workflow.executor_settings.status_cmd.rstrip(),
                         ),
                         shell=True,
                         env=env,
@@ -299,7 +299,7 @@ class Executor(RemoteExecutor):
                     if self.sidecar_vars:
                         env["SNAKEMAKE_CLUSTER_SIDECAR_VARS"] = self.sidecar_vars
                     subprocess.check_call(
-                        [self.workflow.executor_settings.cancel_cmd] + chunk,
+                        [self.workflow.executor_settings.cancel_cmd.rstrip()] + chunk,
                         shell=False,
                         timeout=cancel_timeout,
                         env=env,
@@ -369,7 +369,7 @@ class Executor(RemoteExecutor):
 
         self.logger.info("Launch sidecar process and read first output line.")
         process = subprocess.Popen(
-            self.workflow.executor_settings.sidecar_cmd,
+            self.workflow.executor_settings.sidecar_cmd.rstrip(),
             stdout=subprocess.PIPE,
             shell=False,
             encoding="utf-8",

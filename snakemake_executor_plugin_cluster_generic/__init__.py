@@ -223,7 +223,7 @@ class Executor(RemoteExecutor):
                                 "workflow execution, "
                                 "have a closer look.).".format(
                                     self.workflow.executor_settings.status_cmd,
-                                    ",".join(self.status_cmd_kills),
+                                    ",".join(map(str, self.status_cmd_kills)),
                                 )
                             )
                             self.status_cmd_kills.clear()
